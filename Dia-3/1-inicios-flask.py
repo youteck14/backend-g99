@@ -3,6 +3,9 @@ from flask import Flask, request
 from datetime import datetime
 # __name__> muestra si el archivo es el archivo principal del proyecto el valor de '__main__' y si no
 #entonces mostrara otro valor
+from flask_cors import CORS
+
+
 
 usuarios = [{
     'correo': 'sanson121416@gmail.com',
@@ -12,6 +15,9 @@ usuarios = [{
 
 """ print(__name__) """
 app = Flask(__name__)#instancia
+#DECLARAR LOS CORS (intercambio de recursos de origen compartido)
+
+CORS(app)
 
 # Endpoint > es cuando definimos una ruta para que puede ser accedida
 #si no se define que verbo HTTP puede acceder, entonces el valor por defecto sera GET
@@ -87,3 +93,4 @@ app.run(debug=True)#debug = indicara si guardamos algun archivo dentro del proye
 #HACER EL FRONTEND DE LA IMAGEN EN TELEGRAM
 #FRONTEND DE LA TABLA Y FORMULARIO
 #MANDADR MENSAJE PRIVADO DE TODOS LAS TAREAS AL PROFE
+
