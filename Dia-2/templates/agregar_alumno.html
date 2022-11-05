@@ -51,4 +51,9 @@
     </button>
   </form>
 </div>
+{% endblock %} {% block scripts %}
+{# <script src="../static/js/agregar_alumno.js"></script> #}
+{# para agregar archivos js, css o imagenes es recomendable utilizar el statement url_for en el cual se indica que
+    tipo de archivo y ademas su nombre de archivo#}
+<script src="{{ url_for('static', filename='js/agregar_alumno.js') }}"></script>
 {% endblock %}

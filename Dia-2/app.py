@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_mysqldb import MySQL
 
 from os import environ
@@ -68,9 +68,25 @@ def devolver_alumnos():
     #}
     return render_template('mostrar_alumnos.html' , alumnos = resultado_final, mensaje='hola desde flask')
 
-@app.route("/agregar-alumno", method=['GET'])
+@app.route("/agregar-alumno", methods=['GET' , 'POST'])
 def agregar_alumno():
-    return render_template('agregar_alumno')
-
+    print(request.method)
+    if request.method == 'GET':
+        return render_template('agregar_alumno.html')
+    elif request.method == 'POST':
+        
+        body = request.get_json()
+        print(body)
+        cursor = mysql.connection.cursor()
+        # al poner el % luego del string es lo mismo que utilizar el metodo .format
+        cursor.execute("INSERT INTO alumnos (id, nombre, ape_paterno, ape_materno, correo, num_emergencia) VALUES (DEFAULT, '%s', '%s','%s', '%s', '%s' )" %(
+            body.get('nombre'), body.get('ape_peterno'), body.get('ape_materno'), body.get('correo'), body.get('num_emergencia')))
+        # indicamos a la base de datos que esa insercion tiene que perdurar (de manera permanente)
+        mysql.connection.commit()
+        #cerrar la conexion con la base de datos
+        cursor.close()
+        return {
+            'message': 'Alumno agregado exitosamente'
+        }
 app.run(debug=True)
 
