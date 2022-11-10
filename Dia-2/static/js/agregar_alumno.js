@@ -15,17 +15,20 @@ const agregarEvento = (e) => {
     num_emergencia: num_emergencia.value,
   };
 
-  fetch("/agregar-alumno", { 
-    method: "POST", 
+  fetch("/agregar-alumno", {
+    method: "POST",
     body: JSON.stringify(data),
-    headers: {"Content-Type": "application/json"}
-})
+    headers: { "Content-Type": "application/json" },
+  })
     .then((request) => {
       return request.json();
     })
     .then((data) => {
       console.log(data);
       // window.location.href = "/mostrar-alumnos";
+    })
+    .catch((error) => {
+      console.log("error al crear el alumno");
     });
 };
 
