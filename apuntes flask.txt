@@ -1,3 +1,5 @@
 flask db init ==> inicializar las migracionas en mi proyecto (debemos tener instalado flask-migrate)
 
- flask db migrate -m "migracion inicial" ==>
+ flask db migrate -m "migracion inicial" ==> crea una nueva migracion con el nombre que le conoquemos
+
+ flask db upgrade   ==> ejecuta todas las migraciones pendientes en la base de datos
