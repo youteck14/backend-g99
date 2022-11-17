@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from flask_restful import Api
 from models.usuarios import UsuarioModel
 
-from flask_mysqldb import MySQL
+#from flask_mysqldb import MySQL
 from models.tareas import TareaModel
 from controllers.usuarioController import UsuariosController, UsuarioController
 from controllers.pruebaController import PruebaController
