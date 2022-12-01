@@ -10,13 +10,17 @@ from .serializers import UsuarioSerializer, PlatoSerializer
 # AllowAny > Permite el libre acceso a todo el mundo
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
+from rest_framework.decorators import api_view
 from .permissions import SoloAdmin
+# para utilizar la row queries (consulta directa a la base de datos sin utizar el ORM)
+from django.db import connection
+
 
 class RegistroUsuarioApiView(CreateAPIView):
 
     queryset = UsuarioModel.objects.all()
     serializer_class = UsuarioSerializer
+    permission_classes = [SoloAdmin]
 
     def post(self,request:Request):
         informacion = self.serializer_class(data=request.data)
@@ -79,6 +83,7 @@ class PlatoToggleApiView(UpdateAPIView):
     queryset = PlatoModel.objects.all()
     serializer_class = PlatoSerializer
     permission_classes = [IsAuthenticated]
+
     def put(self, request:Request, id:str):
         #primero busco si existe el plato
         #SELECT * FROM platos WHERE id = ... LIMIT 1;
@@ -129,3 +134,32 @@ class VistaProtegidaPlatosApiView(ListAPIView):
         })
 
 
+@api_view(http_method_names=['GET'])
+def mostrar_usuarios_raw(request):
+    with connection.cursor() as cursor:#conexion a nuestra base de datos directamente
+        # al utilizar un SP, fuhncion, vista o algo que no se haya definico en los modelos
+        #en el ORM, la unica forma de utilizarla desde el backend es mediante una raw query
+        cursor.execute("CALL DevolverTodoslosUsuarios()")
+        resultado = cursor.fetchall()
+        print(resultado)
+        #ahora mapeariamos el resultado
+        #print(resultado)
+        # ahora mapeariamos el resultado (se recomienda utilizar un serailizador PERO no un ModelSerializer puesto qu eno estamos utilizando ningun modelo)
+        for usuario in resultado:
+            print(usuario[3])#nombre
+
+        #este seria el caso cuando nosotros queremos utilizar un SP que devulelva cierta informacion conun parametro OUT
+        cursor.execute("CALL DevolverUsuariosSegunTipo('ADMIN', @usuarioId)")
+        cursor.execute('SELECT @usuarioId')
+        #fetchone() > devolvera la primera fila de todo el resultado
+        #fetchall()> devolvera todos los registros
+        #fetchmany(registros)> devolver la cantidad de registros indicado
+        resultado2 = cursor.fetchone()
+        print(resultado2)
+        return Response(data={
+            'message' : 'Procedimiento almacenado ejecutado exitosamente',
+            'content':{
+                'admin' : resultado2[0]
+            }
+
+        })

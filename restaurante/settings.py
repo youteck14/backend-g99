@@ -42,9 +42,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'gestion',
+    'corsheaders',# para trabajar con el uso de los cors
+    'rest_framework',#para django rest-framework pueda devolver la informacion por el navegador
+    #usando css y js
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -152,3 +156,9 @@ SIMPLE_JWT = {
     #Es el nombre con el cual se guardara en el payload el id del usuario
     'USER_ID_CLAIM': 'id_del_usuario'
 }
+
+#Sirve para indicar a los CORS que origenes estan permitios de hacer consultas
+CORS_ALLOWED_ORIGINS = ['http://127.0.0.1:5500', 'https://www.google.com']
+
+#Sirve para indicar los metodos que puede consultar mi backend
+CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT']

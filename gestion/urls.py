@@ -11,4 +11,5 @@ urlpatterns = [
     path('plato/<int:pk>', PlatoUpdateApiView.as_view()),
     path('iniciar-sesion/', TokenObtainPairView.as_view()),
     path('platos-protegido/', VistaProtegidaPlatosApiView.as_view()),
+    path('procedimiento-almacenado/', mostrar_usuarios_raw)#funcion y no clase
 ]
