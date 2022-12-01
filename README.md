@@ -16,6 +16,6 @@ Cada semana esta en una rama independiente, en la cual se ira detallando a conti
 - Semana 04: <a href="https://github.com//backend-g9/tree/semana04">LINK</a>
 - Semana 05: <a href="https://github.com//backend-g9/tree/semana05">LINK</a>
 - Semana 06: <a href="https://github.com//backend-g9/tree/semana06">LINK</a>
-- Semana07:
-- Semana08:
+- Semana07: <a href="https://github.com//backend-g9/tree/semana07">LINK</a>
+- Semana08: <a href="https://github.com//backend-g9/tree/semana08">LINK</a>
 - Semana09:
