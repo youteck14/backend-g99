@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Producto{
+  id              Int @id @default(autoincrement())
+  nombre          String @db.VarChar(50)
+  precio          Float @db.Float
+  disponibilidad  Boolean @default(true)
+  cantindad       Int
+
+  //ahora relaciono la tabla
+  detallePedido DetallePedido[]//producto puede estar presente en varios detalle
+  //por eso ponemos corchetes porque puede ser un arreglo de detalle de pedidos
+
+  //asi se cambia el nombre de la tabla en la base de datos
+  @@map("productos")
+}
+
+model Cliente{
+  id        Int @id @default(autoincrement())
+  nombre    String @db.VarChar(50)
+  //al ponder el simbolo de interrogacion en el tipo de dato estamos indicando
+  //que esa columna puede admitir valores nulos
+  apellido  String? @db.VarChar(50)
+  dni       String @unique @db.VarChar(8)
+  correo    String
+  createAt  DateTime @default(now()) @map("created_at")//si queremos que la base de datos ponga 
+  //la hora y fecha actual
+
+  //ahora relaciono la tabla clientes con la tabla cabecera_pedidos
+  cabeceraPedido CabeceraPedido[]
+  @@map("clientes")
+}
+
+model CabeceraPedido{
+  id              Int @id @default(autoincrement())
+  clienteId       Int @map("cliente_id")
+  fechaEmision    DateTime @map("fecha_emision")
+  //ahora creo las relaciones
+  cliente         Cliente @relation(fields:[clienteId], references: [id])
+  detallePedido  DetallePedido[]
+  @@map("cabecera_pedidos")
+}
+
+model DetallePedido{
+  id            Int @id @default(autoincrement())
+  productoID    Int @map("producto_id")
+  cantidad      Int
+  valor_venta   Float @db.Float
+  pedidoID      Int @map("pedido_id")
+  //ahora creo las relaciones
+  producto Producto @relation(fields:[productoID], references: [id])
+
+  pedido CabeceraPedido @relation(fields: [pedidoID],references: [id])
+
+  @@map("detalle_pedidos")
+}
