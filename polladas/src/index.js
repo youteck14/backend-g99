@@ -1,4 +1,5 @@
 import express, {json} from "express";
+import { productosRouter } from "./routes/productos.routes.js";
 
 const servidor = express()
 
@@ -9,6 +10,8 @@ servidor.use(json());
 //Nullish coalesing operator ?? si null o undefined pasara al
 //al otro lado en este caso 5000
 const PORT = process.env.PORT ?? 5000;
+
+servidor.use(productosRouter);
 
 servidor.listen(PORT,() =>{
     console.log(`Servidor corriendo exitosamente en el puerto ${PORT}`);
